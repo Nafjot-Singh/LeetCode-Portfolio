@@ -34,7 +34,7 @@
 34    int maxSum = 0;
 35
 36    while(new_head!=NULL){
-37        if((head->val+new_head->val) > maxSum){
+37        if(head->val+new_head->val > maxSum){
 38            maxSum = head->val+new_head->val;
 39        }
 40        head=head->next;
