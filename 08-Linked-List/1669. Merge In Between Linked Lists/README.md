@@ -37,71 +37,63 @@
 
 # 🛍️ Merge-In-Between-Linked-Lists | Explained
 
-## Approach 1: Iterative Linked List Modification
+## Approach 1: Iterative Pointer Movement
 ### Intuition
-This approach works by iteratively traversing the linked list to find the nodes before and after the sub-list to be replaced. It's similar to editing a document where you need to replace a section of text by deleting the existing section and then inserting the new text. The key idea is to update the `next` pointers of the adjacent nodes to effectively "splice" the new list into the original list.
+The core idea behind this approach is to utilize pointers to traverse and manipulate the linked lists. It works by identifying the start and end nodes of the section to be replaced in the first list, and then connecting the start of the second list to the end of the section being replaced.
 
 ### Algorithm Visualized
 ```mermaid
-graph LR
-    A[List 1] -->|a|> B[Node before a]
-    B --> C[Node a]
-    C --> ... --> D[Node b]
-    D --> E[Node after b]
-    F[List 2] --> ... --> G[Tail of List 2]
-    B -->|updated next|> F
-    G -->|updated next|> E
+graph LR;
+    A[List 1] --> B[Node a]
+    B --> C[Nodes a+1 to b]
+    C --> D[Node b+1]
+    E[List 2] --> F[Nodes of List 2]
+    F --> G[End of List 2]
+    B --> E
+    G --> D
 ```
 
 ### Approach
-The algorithm can be broken down into the following steps:
-1. Find the node before the sub-list to be replaced (node before `a`).
-2. Find the node after the sub-list to be replaced (node after `b`).
-3. Delete the sub-list to be replaced by iterating from node `a` to node `b`.
-4. Update the `next` pointer of the node before `a` to point to the head of the new list.
-5. Update the `next` pointer of the tail of the new list to point to the node after `b`.
+1. Find the node right before the section to be replaced in the first list (start).
+2. Find the node right after the section to be replaced in the first list (end of section).
+3. Find the last node of the second list (end of list 2).
+4. Connect the start node to the first node of the second list.
+5. Connect the last node of the second list to the end of the section being replaced.
 
 ### Detailed Code Analysis
-Let's dive into the code:
-- Lines 12-15: Find the node before the sub-list to be replaced (`node_before_a`). This is done by iterating `a-1` times from the head of the list.
-- Lines 17-22: Find the node after the sub-list to be replaced (`current_node`) and delete the sub-list by iterating `b-a+1` times from node `a`. The `temp` variable is used to store the node to be deleted before moving to the next node.
-- Lines 24-27: Find the tail of the new list (`list2_tail`) by iterating from the head of `list2` until `NULL` is reached.
-- Lines 29-30: Update the `next` pointer of `node_before_a` to point to the head of `list2`, effectively splicing `list2` into `list1`.
-- Line 31: Update the `next` pointer of the tail of `list2` to point to `current_node`, completing the merge.
+The code starts by initializing a pointer `start` to the head of the first list. It then moves this pointer `a-1` steps forward to find the node right before the section to be replaced. 
+
+Next, it initializes another pointer `q` to the node right after `start`, which is the start of the section to be replaced. It then moves `q` `b-a+1` steps forward to find the node right after the section to be replaced.
+
+The code then initializes a pointer `end` to the head of the second list and moves it to the end of the second list. 
+
+Finally, it connects `start` to the head of the second list, and `end` to the node right after the section being replaced (`q`).
 
 ### Code
 ```c
 struct ListNode* mergeInBetween(struct ListNode* list1, int a, int b, struct ListNode* list2){
-    struct ListNode * node_before_a = list1;
+    struct ListNode * start = list1;
     for(int i=1; i<a; i++){
-        node_before_a=node_before_a->next;
+        start=start->next;
     }
 
-    struct ListNode * current_node = node_before_a->next;
-    for(int i=0; i < (b - a + 1); i++){
-        struct ListNode* temp = current_node;
-        current_node=current_node->next;
-        free(temp);
+    struct ListNode * q = start->next;
+    for(int i=0; i<(b-a+1); i++){
+        q=q->next;
     }
 
-    struct ListNode * list2_tail = list2;
-    while(list2_tail->next != NULL){
-        list2_tail = list2_tail->next;
+    struct ListNode * end = list2;
+    while(end->next != NULL){
+        end = end->next;
     }
 
-    node_before_a->next=list2;
-    list2_tail->next = current_node;
+    start->next=list2;
+    end->next = q;
 
     return list1;
 }
 ```
 
 ### Complexity
-- **Time:** O(a + (b-a+1) + n), where n is the number of nodes in `list2`. This is because we iterate `a-1` times to find the node before `a`, `b-a+1` times to delete the sub-list, and n times to find the tail of `list2`. However, since a, b, and n are all part of the input, we can simplify the time complexity to O(a + b + n).
-- **Space:** O(1), excluding the space required for the input lists. This is because we only use a constant amount of space to store the pointers and variables, regardless of the input size.
-
-## 🕵️‍♂️ Follow-up Questions (Optional)
-1. How would you handle the case where `list2` is empty? 
-   - In this case, we would still need to update the `next` pointer of `node_before_a` to point to `current_node`, effectively deleting the sub-list and merging the two lists.
-2. What if `a` is equal to `b`? 
-   - If `a` is equal to `b`, it means we are replacing a single node with `list2`. We would still need to update the `next` pointer of `node_before_a` to point to `list2`, and the `next` pointer of the tail of `list2` to point to the node after `b`.
+- **Time:** O(a + b - a + 1 + n), where n is the number of nodes in the second list. This simplifies to O(b + n), which represents the number of nodes traversed in both lists.
+- **Space:** O(1), since we are only using a constant amount of space to store the pointers.
