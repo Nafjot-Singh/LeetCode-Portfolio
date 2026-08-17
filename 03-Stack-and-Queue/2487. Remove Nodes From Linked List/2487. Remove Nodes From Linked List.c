@@ -30,9 +30,9 @@
 30
 31   while(curr!=NULL && curr->next!=NULL){
 32    if(curr->next->val < max_node){
-33        struct ListNode * temp = curr->next;   
+33        // struct ListNode * temp = curr->next;   
 34        curr->next = curr->next->next;
-35        free(temp);
+35        // free(temp);
 36    }
 37    else{
 38        curr=curr->next;
