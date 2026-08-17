@@ -35,4 +35,4 @@
 
 ---
 
-Error connecting to AI API: The model `llama-3.3-70b-versatile` does not exist or you do not have access to it.
+Error connecting to AI API: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
