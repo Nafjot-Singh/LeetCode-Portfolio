@@ -1,0 +1,1 @@
+                    *returnSize = 0;                    return NULL;                }                result[0] = i;                result[1] = j;                *returnSize = 2;                return result;             }         }    }    *returnSize = 0;    return NULL;}
