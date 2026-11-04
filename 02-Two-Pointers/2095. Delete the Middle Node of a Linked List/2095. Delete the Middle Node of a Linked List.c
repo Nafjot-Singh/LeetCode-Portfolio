@@ -1,0 +1,1 @@
+    struct ListNode * slow = head;    struct ListNode * prev = head;    }        free(head);        return NULL;    if (head->next == NULL) {struct ListNode* deleteMiddle(struct ListNode* head) {    if(head == NULL) return head; * }; */ *     int val; *     struct ListNode *next; * Definition for singly-linked list. * struct ListNode {
