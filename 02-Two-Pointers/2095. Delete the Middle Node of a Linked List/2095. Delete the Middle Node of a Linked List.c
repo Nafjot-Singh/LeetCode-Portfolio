@@ -13,17 +13,16 @@
 13        return NULL;
 14    }
 15
-16    struct ListNode * prev;
-17    struct ListNode * slow = head;
-18    struct ListNode * fast = head;
-19
-20    while(fast && fast->next){
-21        prev = slow;
-22        slow = slow->next;
-23        fast = fast->next->next;
-24    }
-25
-26    prev->next = slow->next;
-27    free(slow);
-28    return head;
-29}
+16    struct ListNode * slow = head;
+17    struct ListNode * fast = head->next->next;
+18
+19    while(fast && fast->next){
+20        slow = slow->next;
+21        fast = fast->next->next;
+22    }
+23
+24    struct ListNode* temp = slow->next;
+25    slow->next = slow->next->next;
+26    free(temp);
+27    return head;
+28}
